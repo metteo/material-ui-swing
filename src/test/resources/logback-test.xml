@@ -30,10 +30,33 @@
     </encoder>
   </appender>
 
+  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <File>${user.home}/material-ui-swing-log/material_log-unit-test.log</File>
+    <Append>true</Append>
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
   <root level="INFO">
-    <appender-ref ref="STDOUT" />
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="FILE"/>
   </root>
 
-  <logger name="mdlaf" level="DEBUG"/>
+  <!-- library level -->
+  <logger name="mdlaf" level="INFO"/>
 
+  <!-- Package level -->
+  <logger name="mdlaf.components" level="INFO"/>
+  <logger name="mdlaf.animation" level="INFO"/>
+  <logger name="mdlaf.themes" level="INFO"/>
+  <logger name="mdlaf.utils" level="INFO"/>
+  <logger name="mdlaf.shadows" level="INFO"/>
+
+  <!-- Package Component -->
+  <logger name="mdlaf.components.button" level="INFO"/>
+  <logger name="mdlaf.components.filechooser" level="INFO"/>
+
+  <shutdownHook/>
 </configuration>
+

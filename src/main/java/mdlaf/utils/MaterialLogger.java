@@ -44,13 +44,26 @@ public final class MaterialLogger {
     }
 
     private Map<String, Logger> loggers = new HashMap<>();
+    private boolean logEnabled = false;
 
-    private MaterialLogger() {}
+
+    private MaterialLogger() {
+        try {
+            Class<?> slf4jLib = Class.forName("org.slf4j.impl.StaticLoggerBinder", false, MaterialLogger.class.getClassLoader());
+            if(slf4jLib != null){
+                Class<?> binder = Class.forName("org.apache.logging.log4j", false, MaterialLogger.class.getClassLoader());
+                //TODO add others binder
+                logEnabled = true;
+            }
+        } catch (ClassNotFoundException e) {
+            System.out.println("*** Material-UI-Swing without system logging");
+        }
+    }
 
     public void debug(Class clazz, String message){
         //TODO implement this
         //TODO implement the if
-        //System.out.println(clazz.getCanonicalName() + " " + message);
+        if(logEnabled){ return; }
         Logger logger = this.getLogger(clazz);
         logger.debug(message);
     }
@@ -58,6 +71,7 @@ public final class MaterialLogger {
     public void info(Class clazz, String message){
         //TODO implement this method
         //TODO implement the if
+        if(logEnabled){ return; }
         Logger logger = this.getLogger(clazz);
         logger.info(message);
     }
@@ -65,7 +79,7 @@ public final class MaterialLogger {
     public void error(Class clazz, String message){
         //TODO implement this method
         //TODO implement the if
-
+        if(logEnabled){ return; }
         Logger logger = this.getLogger(clazz);
         logger.error(message);
     }

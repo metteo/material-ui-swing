@@ -24,6 +24,7 @@
 package mdlaf.animation;
 
 import mdlaf.components.button.MaterialButtonUI;
+import mdlaf.utils.MaterialLogger;
 
 
 import javax.swing.*;
@@ -38,6 +39,9 @@ import java.beans.PropertyChangeListener;
  * @author https://github.com/atarw
  */
 public class MaterialUITimer implements ActionListener, MaterialMouseHover {
+
+    private static final Class LOG_TAG = MaterialUITimer.class;
+
 
     private Color from, to;
     private boolean forward;
@@ -74,6 +78,8 @@ public class MaterialUITimer implements ActionListener, MaterialMouseHover {
         } else {
             this.from = component.getBackground();
         }
+
+        MaterialLogger.getInstance().debug(LOG_TAG, "Mouse listener installed on component: " + LOG_TAG.getCanonicalName());
         this.to = to;
 
         this.forwardDeltas = new int[4];
@@ -160,6 +166,7 @@ public class MaterialUITimer implements ActionListener, MaterialMouseHover {
 
     @Override
     public void actionPerformed(ActionEvent ae) {
+        MaterialLogger.getInstance().debug(LOG_TAG, "Timer class, method actionPerformed called for component: " + component.getName());
         if (!component.isEnabled()) {
             //if (timer.isRunning()) {
                 /*if ((component instanceof JButton) &&

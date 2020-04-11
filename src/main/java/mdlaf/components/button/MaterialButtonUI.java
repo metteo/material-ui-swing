@@ -45,6 +45,8 @@ import java.beans.PropertyChangeListener;
  */
 public class MaterialButtonUI extends BasicButtonUI {
 
+    protected static final Class LOG_TAG = MaterialButtonUI.class;
+
     public static ComponentUI createUI(final JComponent c) {
         return new MaterialButtonUI();
     }
@@ -184,8 +186,8 @@ public class MaterialButtonUI extends BasicButtonUI {
      * @param c Component Object, rappresent the button, if possible use this object or the propriety
      *          called button inside this class
      */
-    //TODO tested this
     protected void paintBackground(Graphics g, JComponent c) {
+        MaterialLogger.getInstance().debug(LOG_TAG, "Method paintBackground called");
         g = MaterialDrawingUtils.getAliasedGraphics(g);
         Graphics2D graphics = (Graphics2D) g.create();
         if (c.isEnabled()) {
@@ -211,6 +213,7 @@ public class MaterialButtonUI extends BasicButtonUI {
 
     @Override
     protected void paintFocus(Graphics g, AbstractButton b, Rectangle viewRect, Rectangle textRect, Rectangle iconRect) {
+        MaterialLogger.getInstance().debug(LOG_TAG, "Method paintFocus called");
         // driveLine(g, (JButton) b);
         paintFocusRing(g, (JButton) b);
         //paintBorderButton(g, b);
@@ -219,6 +222,7 @@ public class MaterialButtonUI extends BasicButtonUI {
 
     @Override
     public void update(Graphics g, JComponent c) {
+        MaterialLogger.getInstance().debug(LOG_TAG, "Method update called");
         super.update(g, c);
         paintBorderButton(g, c);
         //c.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -226,6 +230,7 @@ public class MaterialButtonUI extends BasicButtonUI {
 
     @Override
     protected void paintButtonPressed(Graphics g, AbstractButton b) {
+        MaterialLogger.getInstance().debug(LOG_TAG, "Method paintButtonPressed called");
         //if the mouse hover is enabled I can set the mouse hover color when the button is pressed
         if (mouseHoverEnabled && mouseHoverRunning) {
             if (b.isEnabled()) {
@@ -403,6 +408,8 @@ public class MaterialButtonUI extends BasicButtonUI {
 
     protected class MaterialListenerButtonEvent implements PropertyChangeListener {
 
+        private final Class LOG_TAG = MaterialButtonMouseListener.class;
+
         private static final String BACKGROUND_EVENT = "background";
         private static final String FOREGROUND_EVENT = "foreground";
         private static final String ENABLED_EVENT = "enabled";
@@ -415,6 +422,7 @@ public class MaterialButtonUI extends BasicButtonUI {
 
             if (evt.getPropertyName().equals(ENABLED_EVENT) && (boolean) evt.getNewValue()) {
                 //When on the JButton does call the method setEnable(true)
+                MaterialLogger.getInstance().debug(this.LOG_TAG, "method proprietyChange inside Button status enable");
                 if (defaultButton != null && defaultButton) {
                     button.setBackground(defaultBackground);
                     button.setForeground(defaultForeground);
@@ -432,9 +440,11 @@ public class MaterialButtonUI extends BasicButtonUI {
             else if (evt.getPropertyName().equals(BACKGROUND_EVENT) && !mouseHoverRunning) {
                 //When on the JButton call the method setBackground
                 background = (Color) evt.getNewValue();
+                MaterialLogger.getInstance().debug(this.LOG_TAG, "Method proprietyChange: propriety background" + background);
             } else if (evt.getPropertyName().equals(FOREGROUND_EVENT) && !mouseHoverRunning) {
                 //When on the JButton call the method setForeground
                 foreground = (Color) evt.getNewValue();
+                MaterialLogger.getInstance().debug(this.LOG_TAG, "Method proprietyChange: propriety foreground" + background);
             }
 
             /*else if (evt.getPropertyName().equals(proprietyNameEnableEvent) && !(boolean) evt.getNewValue()) {
@@ -471,13 +481,11 @@ public class MaterialButtonUI extends BasicButtonUI {
         @Override
         public void mouseEntered(MouseEvent mouseEvent) {
             mouseHoverRunning = true;
-            MaterialLogger.getInstance().debug(this.getClass(), "Mouse hover start");
         }
 
         @Override
         public void mouseExited(MouseEvent mouseEvent) {
             mouseHoverRunning = false;
-            MaterialLogger.getInstance().debug(this.getClass(), "Mouse hover Stop");
         }
 
         @Override
