@@ -38,25 +38,25 @@
         </encoder>
     </appender>
 
-    <root level="INFO">
+    <root level="debug">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>
 
     <!-- library level -->
-    <logger name="mdlaf" level="INFO"/>
+    <logger name="mdlaf" level="info"/>
 
     <!-- Package level -->
-    <logger name="mdlaf.components" level="INFO"/>
-    <logger name="mdlaf.animation" level="INFO"/>
-    <logger name="mdlaf.themes" level="INFO"/>
-    <logger name="mdlaf.utils" level="INFO"/>
-    <logger name="mdlaf.shadows" level="INFO"/>
+    <logger name="mdlaf.components" level="info"/>
+    <logger name="mdlaf.animation" level="info"/>
+    <logger name="mdlaf.themes" level="info"/>
+    <logger name="mdlaf.utils" level="info"/>
+    <logger name="mdlaf.shadows" level="info"/>
 
     <!-- Package Component -->
-    <logger name="mdlaf.components.button" level="DEBUG"/>
-    <logger name="mdlaf.components.filechooser" level="INFO"/>
+    <logger name="mdlaf.components.button" level="info"/>
+    <logger name="mdlaf.components.tabbedpane" level="debug"/>
+    <logger name="mdlaf.components.filechooser" level="info"/>
 
-    <shutdownHook/>
 </configuration>
 

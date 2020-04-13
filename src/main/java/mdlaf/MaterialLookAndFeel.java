@@ -75,7 +75,6 @@ import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.text.DefaultEditorKit;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.Method;
 

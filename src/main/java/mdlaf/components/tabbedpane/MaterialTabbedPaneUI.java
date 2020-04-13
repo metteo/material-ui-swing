@@ -61,7 +61,7 @@ import mdlaf.utils.MaterialLogger;
  */
 public class MaterialTabbedPaneUI extends BasicTabbedPaneUI {
 
-    private static final Class LOG_TAG = MaterialTaskPaneUI.class;
+    private static final Class LOG_TAG = MaterialTabbedPaneUI.class;
 
     public static ComponentUI createUI(JComponent c) {
         return new MaterialTabbedPaneUI();
@@ -190,11 +190,6 @@ public class MaterialTabbedPaneUI extends BasicTabbedPaneUI {
     protected void paintTab(Graphics g, int tabPlacement, Rectangle[] rects, int tabIndex, Rectangle iconRect, Rectangle textRect) {
         // for some reason tabs aren't painted properly by paint()
         super.paintTab(MaterialDrawingUtils.getAliasedGraphics(g), tabPlacement, rects, tabIndex, iconRect, textRect);
-        //TODO Should be the cause of StackOverflowException
-        if (mouseHoverEnabled != null && mouseHoverEnabled && mouseHoverTab == null) {
-            mouseHoverTab = new MaterialMouseHoverTab(rects);
-            tabPane.addMouseMotionListener(mouseHoverTab);
-        }
     }
 
     @Override
@@ -407,7 +402,7 @@ public class MaterialTabbedPaneUI extends BasicTabbedPaneUI {
     //MaterialTabbedPaneLayout was declared deprecated.
     @Override
     protected LayoutManager createLayoutManager() {
-        if (tabPane.getTabLayoutPolicy() == JTabbedPane.SCROLL_TAB_LAYOUT) {
+        if(tabPane.getTabLayoutPolicy() == JTabbedPane.SCROLL_TAB_LAYOUT) {
             return super.createLayoutManager();
         }else{
             return super.createLayoutManager();
@@ -416,9 +411,22 @@ public class MaterialTabbedPaneUI extends BasicTabbedPaneUI {
     }
 
     @Override
+    protected void installListeners() {
+        super.installListeners();
+        //TODO Should be the cause of StackOverflowException
+        if (mouseHoverEnabled != null && mouseHoverEnabled && mouseHoverTab == null) {
+            mouseHoverTab = new MaterialMouseHoverTab(rects);
+            tabPane.addMouseMotionListener(mouseHoverTab);
+        }
+    }
+
+    @Override
     protected void uninstallListeners() {
         super.uninstallListeners();
-        super.tabPane.removeMouseMotionListener(mouseHoverTab);
+        //TODO Should be the cause of StackOverflowException
+        if (mouseHoverEnabled != null && mouseHoverEnabled && mouseHoverTab != null) {
+            super.tabPane.removeMouseMotionListener(mouseHoverTab);
+        }
     }
 
     @Override
@@ -483,86 +491,55 @@ public class MaterialTabbedPaneUI extends BasicTabbedPaneUI {
      */
     protected class MaterialMouseHoverTab implements MaterialMouseHover {
 
+        @Deprecated
         private Rectangle[] rectangles;
 
+        @Deprecated
         public MaterialMouseHoverTab(Rectangle[] rectangles) {
             this.rectangles = rectangles;
         }
+        public MaterialMouseHoverTab() { }
 
         @Override
-        public void mouseDragged(MouseEvent e) {
-        }
+        public void mouseDragged(MouseEvent e) { }
 
         @Override
         public void mouseMoved(MouseEvent e) {
             MaterialLogger.getInstance().debug(LOG_TAG, "Called method mouseMoved inside MaterialMouseHoverTab class");
             JComponent mouseGenerate = (JComponent) e.getSource();
-            if (!mouseGenerate.isEnabled()) {
-                return;
-            }
-            if (mouseGenerate.getCursor().equals(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR))) {
+            if (!mouseGenerate.isEnabled() ||
+                    mouseGenerate.getCursor().equals(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR))) {
                 return;
             }
             Point point = e.getPoint();
+            if(tabPane.indexAtLocation(point.x, point.y) != -1){
+                mouseGenerate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                return;
+            }
+            /*
             for (Rectangle r : rectangles) {
                 if (r.contains(point)) {
                     mouseGenerate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     return;
                 }
-            }
+            }*/
             mouseGenerate.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
 
-        /**
-         * Invoked when the mouse button has been clicked (pressed
-         * and released) on a component.
-         *
-         * @param e the event to be processed
-         */
         @Override
-        public void mouseClicked(MouseEvent e) {
-            //do nothing
-        }
+        public void mouseClicked(MouseEvent e) {}
 
-        /**
-         * Invoked when a mouse button has been pressed on a component.
-         *
-         * @param e the event to be processed
-         */
         @Override
-        public void mousePressed(MouseEvent e) {
-            //do nothing
-        }
+        public void mousePressed(MouseEvent e) {}
 
-        /**
-         * Invoked when a mouse button has been released on a component.
-         *
-         * @param e the event to be processed
-         */
         @Override
-        public void mouseReleased(MouseEvent e) {
-            //do nothing
-        }
+        public void mouseReleased(MouseEvent e) {}
 
-        /**
-         * Invoked when the mouse enters a component.
-         *
-         * @param e the event to be processed
-         */
         @Override
-        public void mouseEntered(MouseEvent e) {
-            //do nothing
-        }
+        public void mouseEntered(MouseEvent e) {}
 
-        /**
-         * Invoked when the mouse exits a component.
-         *
-         * @param e the event to be processed
-         */
         @Override
-        public void mouseExited(MouseEvent e) {
-            //do nothing
-        }
+        public void mouseExited(MouseEvent e) {}
     }
 
     //TODO I will work on this
